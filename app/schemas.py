@@ -1,16 +1,16 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 
 # === КАТЕГОРИИ ===
 
 class CategoryBase(BaseModel):
-    title: str
+    title: str = Field(..., min_length=1, max_length=100, description="Название категории")
 
 class CategoryCreate(CategoryBase):
     pass
 
-class CategoryUpdate(CategoryBase):
-    title: Optional[str] = None
+class CategoryUpdate(BaseModel):
+    title: Optional[str] = Field(None, min_length=1, max_length=100)
 
 class CategoryResponse(CategoryBase):
     id: int
@@ -21,21 +21,21 @@ class CategoryResponse(CategoryBase):
 # === КНИГИ ===
 
 class BookBase(BaseModel):
-    title: str
-    description: Optional[str] = None
-    price: float
-    url: Optional[str] = None
-    category_id: int
+    title: str = Field(..., min_length=1, max_length=200, description="Название книги")
+    description: Optional[str] = Field(None, max_length=1000, description="Описание книги")
+    price: float = Field(..., gt=0, le=100000, description="Цена книги (должна быть больше 0)")
+    url: Optional[str] = Field(None, max_length=500, description="URL книги")
+    category_id: int = Field(..., gt=0, description="ID категории (должен быть больше 0)")
 
 class BookCreate(BookBase):
     pass
 
 class BookUpdate(BookBase):
-    title: Optional[str] = None
-    description: Optional[str] = None
-    price: Optional[float] = None
-    url: Optional[str] = None
-    category_id: Optional[int] = None
+    title: Optional[str] = Field(None, min_length=1, max_length=200)
+    description: Optional[str] = Field(None, max_length=1000)
+    price: Optional[float] = Field(None, gt=0, le=100000)
+    url: Optional[str] = Field(None, max_length=500)
+    category_id: Optional[int] = Field(None, gt=0)
 
 class BookResponse(BookBase):
     id: int
