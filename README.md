@@ -1,14 +1,30 @@
-# FastAPI Book API
+## Как запустить проект
 
-API для управления книгами и категориями на FastAPI + PostgreSQL.
+Нет, после `cd fastapi_project` проект сам не запустится. Нужно:
 
-## Требования
-- Python 3.8+
-- PostgreSQL
+1. Создать и активировать виртуальное окружение:
+python3 -m venv venv
+source venv/bin/activate
 
-## Установка
+2. Установить зависимости:
+pip install -r requirements.txt
 
-1. Клонируйте репозиторий:
-```bash
-git clone https://github.com/Skyiz1116/fastapi_project.git
-cd fastapi_project
+3. Создать файл .env в корне проекта и добавить переменную:
+DATABASE_URL=postgresql://octagon:12345@localhost/octagon_db
+
+Зачем нужна DATABASE_URL: это строка подключения к базе данных PostgreSQL. Без неё приложение не сможет подключиться к БД и не запустится (вылетит с ошибкой ValueError).
+
+Разбор строки:
+- postgresql:// — тип БД
+- octagon — пользователь БД (заменить на своего)
+- 12345 — пароль пользователя (заменить на свой)
+- localhost — адрес сервера БД
+- octagon_db — имя базы данных (заменить на свою)
+
+Важно: файл .env содержит пароль от БД и НЕ загружается на GitHub (он в .gitignore). Каждый, кто клонирует проект, должен создать свой .env со своими данными.
+
+4. Запустить сервер:
+uvicorn app.main:app --reload
+
+5. Открыть документацию:
+http://127.0.0.1:8000/docs
